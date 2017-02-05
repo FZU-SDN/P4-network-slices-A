@@ -1,0 +1,7 @@
+table_set_default Match_Table _noop
+table_set_default Ipv4_lpm _drop
+table_set_default Forward _drop
+table_set_default Apply_Drop _noop
+table_add Ipv4_lpm Set_DstMetadata 10.0.0.3/32 => 10.0.0.3
+table_add Forward forward 10.0.0.3 => 3
+table_add Match_Table count_action 10.0.0.3 => 0

@@ -1,0 +1,3 @@
+table_set_default Count_Table _drop
+table_set_default route_pkt route
+table_add Count_Table Read_Register 00000101 => 1
