@@ -27,7 +27,7 @@ import os
 import subprocess
 
 _THIS_DIR = os.path.dirname(os.path.realpath(__file__))
-_THRIFT_BASE_PORT = 9090
+_THRIFT_BASE_PORT = 22222
 
 parser = argparse.ArgumentParser(description='Mininet demo')
 parser.add_argument('--behavioral-exe', help='Path to behavioral executable',
