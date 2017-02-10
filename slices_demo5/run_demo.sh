@@ -27,12 +27,12 @@ SWITCH_PATH=$BMV2_PATH/targets/simple_switch/simple_switch
 
 CLI_PATH=$THIS_DIR/simple_switch_CLI.py
 
-$P4C_BM_SCRIPT p4src/slices_demo4.p4 --json slices_demo4.json
+$P4C_BM_SCRIPT p4src/slices_demo5.p4 --json slices_demo5.json
 # $P4C_BM_SCRIPT l2_switch.p4 --json l2_switch.json
 # This gives libtool the opportunity to "warm-up"
 # sudo $SWITCH_PATH >/dev/null 2>&1
 sudo PYTHONPATH=$PYTHONPATH:$BMV2_PATH/mininet/ python topo.py \
     --behavioral-exe $SWITCH_PATH \
-    --json slices_demo4.json \
+    --json slices_demo5.json \
     --cli $CLI_PATH \
     --mode l2
