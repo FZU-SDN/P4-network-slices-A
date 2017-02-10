@@ -1,0 +1,14 @@
+table_set_default smac mac_learn
+table_set_default dmac broadcast
+table_set_default tagin _noop
+table_set_default tagout _noop
+
+mc_mgrp_create 1
+mc_node_create 0 1
+mc_node_create 1 2
+mc_node_create 2 3
+mc_node_create 3 4
+mc_node_associate 1 0
+mc_node_associate 1 1
+mc_node_associate 1 2
+mc_node_associate 2 3

@@ -1,0 +1,7 @@
+table_add tagin add_flag 00:00:00:00:00:01 => 00000001
+table_add tagin add_flag 00:00:00:00:00:03 => 00000001
+table_add tagin add_flag 00:00:00:00:00:02 => 00000010
+table_add tagin add_flag 00:00:00:00:00:04 => 00000010
+
+table_add tagout tag_action 00000001 => 0
+table_add tagout tag_action 00000002 => 1
