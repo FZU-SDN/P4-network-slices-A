@@ -15,6 +15,7 @@
 
     table_set_default smac mac_learn
     table_set_default dmac broadcast
+    
     mc_mgrp_create 1
     mc_node_create 0 1
     mc_node_create 1 2
@@ -158,13 +159,13 @@ table mcast_src_pruning {
     table_add tagin add_flag 00:00:00:00:00:04 => 00000010
 
     table_add tagout tag_action 00000001 => 0
-    table_add tagout tag_action 00000002 => 1
+    table_add tagout tag_action 00000010 => 1
 
     counter_read tag_counter 0
     counter_read tag_counter 1
 
     table_add tagout _drop 00000001 => 
-    table_add tagout _drop 00000002 => 
+    table_add tagout _drop 00000010 =>
 
  ******************************/
 
@@ -199,8 +200,8 @@ counter tag_counter {
     instance_count : 16384;
 }
 
-actions tag_action(index) {
-    count(tag_action, index);
+action tag_action(index) {
+    count(tag_counter, index);
     remove_header(flag);
 }
 
