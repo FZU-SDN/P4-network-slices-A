@@ -1,4 +1,4 @@
-## P4_Slices_DEMO2 README
+## Demo2 README
 
 ### 实验目的：
 
