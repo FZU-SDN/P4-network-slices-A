@@ -1,5 +1,9 @@
-// Demo 4
+// Demo 5
 // Added by Chen, 2017-1-22
+
+// log:
+// changed by Chen, 2017-2-12
+
 // Based on l2switch
 
 //uncomment to enable openflow
@@ -102,11 +106,61 @@ table mcast_src_pruning {
     size : 1;
 }
 
+/******************************/
+
+header_type flag_t {
+    fields {
+        tag : 8;
+    }
+}
+
+header flag_t flag;
+
+action add_flag(value) {
+    add_header(flag);
+    modify_field(flag.tag, value);
+}
+
+table tagin {
+    reads {
+        ethernet.dstAddr : exact;
+    }
+    actions {
+        add_flag;
+        _nop;
+    }
+}
+
+counter tag_counter {
+    type : packets;
+    static : tagout;
+    instance_count : 16384;
+}
+
+action tag_action(index) {
+    count(tag_counter, index);
+    remove_header(flag);
+}
+
+table tagout {
+    reads {
+        flag.tag : exact;
+    }
+    actions {
+        tag_action;
+        _nop;
+        _drop;
+    }
+}
+
+/******************************/
+
 control ingress {
 #ifdef OPENFLOW_ENABLE
     apply(packet_out) {
         nop {
 #endif /* OPENFLOW_ENABLE */
+	    apply(tagin);
             apply(smac);
             apply(dmac);
 #ifdef OPENFLOW_ENABLE
@@ -121,7 +175,7 @@ control egress {
     if(standard_metadata.ingress_port == standard_metadata.egress_port) {
         apply(mcast_src_pruning);
     }
-
+    apply(tagout);
 #ifdef OPENFLOW_ENABLE
     process_ofpat_egress();
 #endif /*OPENFLOW_ENABLE */
