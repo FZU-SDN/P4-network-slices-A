@@ -150,8 +150,8 @@ table mcast_src_pruning {
     
     cmds:
 
-    table_set_default tagin _noop
-    table_set_default tagout _noop
+    table_set_default tagin _nop
+    table_set_default tagout _nop
 
     table_add tagin add_flag 00:00:00:00:00:01 => 00000001
     table_add tagin add_flag 00:00:00:00:00:03 => 00000001
