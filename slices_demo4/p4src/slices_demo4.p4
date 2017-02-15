@@ -169,7 +169,7 @@ table mcast_src_pruning {
 
  ******************************/
 
-/******************************/
+/******************************
 
 header_type flag_t {
     fields {
@@ -216,14 +216,14 @@ table tagout {
     }
 }
 
-/******************************/
+ ******************************/
 
 control ingress {
 #ifdef OPENFLOW_ENABLE
     apply(packet_out) {
         nop {
 #endif /* OPENFLOW_ENABLE */
-            apply(tagin);
+            //apply(tagin);
             apply(smac);
             apply(dmac);
 #ifdef OPENFLOW_ENABLE
@@ -238,7 +238,7 @@ control egress {
     if(standard_metadata.ingress_port == standard_metadata.egress_port) {
         apply(mcast_src_pruning);
     }
-    apply(tagout);
+    //apply(tagout);
 #ifdef OPENFLOW_ENABLE
     process_ofpat_egress();
 #endif /*OPENFLOW_ENABLE */
