@@ -1,0 +1,8 @@
+table_add smac _nop 00:00:00:00:00:01 =>
+table_add smac _nop 00:00:00:00:00:02 =>
+table_add smac _nop 00:00:00:00:00:03 =>
+table_add smac _nop 00:00:00:00:00:04 =>
+table_add dmac forward 00:00:00:00:00:01 => 03
+table_add dmac forward 00:00:00:00:00:02 => 03
+table_add dmac forward 00:00:00:00:00:03 => 01
+table_add dmac forward 00:00:00:00:00:04 => 02
