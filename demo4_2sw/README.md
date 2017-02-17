@@ -1,25 +1,6 @@
 ## Demo4 README
 
-## 1sw
-
-若需要尝试本demo，请修改以下文件：
-
-topo.txt
-
-```
-switches 1
-hosts 4
-h1 s1
-h2 s1
-h3 s1
-h4 s1
-```
-
-add_entry:
-
-```
-sudo ./simple_switch_CLI --thrift-port 22222 < commands.txt
-```
+## 2sw
 
 1.拓扑信息：
 
@@ -54,10 +35,17 @@ h4 -> X X X
 *** Results: 100% dropped (0/12 received)
 ```
 
-3.打开新的终端，启动learn_client，交换机进行mac学习。
+3.打开两个新的终端A和B，分别启动s1、s2的learn_client，使两台交换机进行mac学习。
 
 ```
-cd learn_client
+cd learn_client_s1
+make
+./learn_client
+```
+
+```
+cd learn_client_s2
+make
 ./learn_client
 ```
 
@@ -81,63 +69,47 @@ h4 -> h1 h2 h3
 *** Results: 0% dropped (12/12 received)
 ```
 
-learn_client信息：
+> 附：也可以通过以下方式执行脚本下发流表使s1、s2及四台host正常通信(无需进行mac_learn)。
 
 ```
-I received 4 samples
-Calling callback function
-CB with 4 samples
-ingress port is 2
-ingress port is 3
-ingress port is 1
-ingress port is 4
+./add_entry.sh
+
+cd mclearn
+./mc_learn.sh
 ```
 
-4.执行脚本：
+5.执行脚本：
 
 ```
+cd slice
 ./start_virtual.sh
 ```
 
-启动两个租户A、B。
-
-同时记录下handle信息：
-
-```
-RuntimeCmd: Adding entry to exact match table tagout
-match key:           EXACT-01
-action:              tag_action
-runtime data:        00:00:00:00
-Entry has been added with handle 0
-RuntimeCmd: Adding entry to exact match table tagout
-match key:           EXACT-08
-action:              tag_action
-runtime data:        00:00:00:01
-Entry has been added with handle 1
-```
-可以看到，流表handle分别为0和1。
+启动两个租户A、B，同时记录流表handle信息(参考1sw)。
 
 租户A使用host 1、2；租户B使用host 3、4.
 
 当交换机接收到来自租户A、B的数据报时，打上tag1、tag2，并对其进行计数。
 
-5.打开cmd控制界面下发运行时命令：
+6.打开cmd控制界面下发运行时命令：
 
 ```
-./simple_switch --thrift-port 22222
+./simple_switch_CLI --thrift-port 22222
+
+./simple_switch_CLI --thrift-port 22223
 ```
 
-查看计数器信息：
+查看计数器信息(在s1的运行时cmd界面)：
 
 ```
 RuntimeCmd: counter_read tag_counter 0
 tag_counter[0]=  BmCounterValue(packets=0, bytes=0)
+
 RuntimeCmd: counter_read tag_counter 1
 tag_counter[1]=  BmCounterValue(packets=0, bytes=0)
-RuntimeCmd: 
 ```
 
-6.在mininet中执行：
+7.在mininet中执行：
 
 ```
 mininet> h1 ping h3
@@ -157,7 +129,7 @@ tag_counter[0]=  BmCounterValue(packets=90, bytes=8596)
 ···
 ```
 
-7.当计数器显示超过一百个包时，从运行时命令行下发运行时命令，阻断h1与h3之间的通信。
+8.当计数器显示超过一百个包时，从运行时命令行下发运行时命令，阻断h1与h3之间的通信。
 
 计数器超过100个包：
 
@@ -167,7 +139,7 @@ RuntimeCmd: counter_read tag_counter 0
 tag_counter[0]=  BmCounterValue(packets=104, bytes=9856)
 ```
 
-下发命令：
+下发命令(注意，请在s1和s2交换机的运行时cmd界面中同时执行)：
 
 a.根据handle删除原有表项：
 
@@ -196,7 +168,7 @@ h4 -> X h2 X
 mininet> 
 ```
 
-8.在mininet中使h2和h4进行通信，在cmd中查看计数器信息：
+9.在mininet中使h2和h4进行通信，在cmd中查看计数器信息：
 
 ```
 mininet> h2 ping h4
@@ -229,5 +201,3 @@ RuntimeCmd:
 本实验在mininet中进行了简单的双租户需求模拟。
 
 在租户A使用h1、h3，租户B使用h2、h4的情况下，对租户A加以限制，当交换机接收的租户A数据报的数目超过100时，不再为租户A提供服务；同时不影响租户B的两台主机的正常通信。
-
-> to be continue.

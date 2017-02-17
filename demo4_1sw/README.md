@@ -39,6 +39,7 @@ h4 -> X X X
 
 ```
 cd learn_client_s1
+make
 ./learn_client
 ```
 
@@ -106,7 +107,7 @@ Entry has been added with handle 1
 5.打开cmd控制界面下发运行时命令：
 
 ```
-./simple_switch --thrift-port 22222
+./simple_switch_CLI --thrift-port 22222
 ```
 
 查看计数器信息：
