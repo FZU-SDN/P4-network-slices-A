@@ -1,13 +1,10 @@
 ## Demo4 README
 
-1.拓扑信息：
+## 1sw
 
-hosts IP: 10.0.0.i 
-hosts MAC: 00:00:00:00:00:0i
+若需要尝试本demo，请修改以下文件：
 
-(i = 1, 2, 3, 4)
-
-> topo.txt:
+topo.txt
 
 ```
 switches 1
@@ -17,6 +14,19 @@ h2 s1
 h3 s1
 h4 s1
 ```
+
+add_entry:
+
+```
+sudo ./simple_switch_CLI --thrift-port 22222 < commands.txt
+```
+
+1.拓扑信息：
+
+hosts IP: 10.0.0.i 
+hosts MAC: 00:00:00:00:00:0i
+
+(i = 1, 2, 3, 4)
 
 执行：
 
