@@ -91,6 +91,19 @@ cd slice
 
 当交换机接收到来自租户A、B的数据报时，打上tag1、tag2，并对其进行计数。
 
+**不同租户之间不能通信。**
+
+```
+mininet> pingall
+*** Ping: testing ping reachability
+h1 -> X h3 X 
+h2 -> X X h4 
+h3 -> h1 X X 
+h4 -> X h2 X 
+*** Results: 66% dropped (4/12 received)
+mininet>
+```
+
 6.打开cmd控制界面下发运行时命令：
 
 ```
@@ -141,18 +154,29 @@ tag_counter[0]=  BmCounterValue(packets=104, bytes=9856)
 
 下发命令(注意，请在s1和s2交换机的运行时cmd界面中同时执行)：
 
-a.根据handle删除原有表项：
+打开两个新的终端，启动cmd界面：
+
+```
+sudo ./simple_switch_CLI --thrift-port 22222
+
+sudo ./simple_switch_CLI --thrift-port 22223
+```
+
+a.根据handle删除原有表项(注意：必须将s1和s2的表项都删除，否则会造成Duplicate Entries异常)：
 
 ```
 RuntimeCmd: table_delete tagout 0
 Deleting entry 0 from tagout
 
+RuntimeCmd: table_delete tagout 1
+Deleting entry 1 from tagout
 ```
 
 b.添加表项，当接收的数据报是租户A的数据报时，丢弃。
 
 ```
-RuntimeCmd: table_add tagout _drop 00000001 => 
+cd apply_drop
+./drop.sh
 ```
 
 此时h1和h3无法正常通信，h2和h4正常通信。

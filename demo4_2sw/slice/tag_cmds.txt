@@ -3,5 +3,12 @@ table_add tagin add_flag 00:00:00:00:00:03 => 00000001
 table_add tagin add_flag 00:00:00:00:00:02 => 00000010
 table_add tagin add_flag 00:00:00:00:00:04 => 00000010
 
-table_add tagout tag_action 00000001 => 0
-table_add tagout tag_action 00000010 => 1
+table_add tagout tag_action 00000001 00:00:00:00:00:01 => 0
+table_add tagout tag_action 00000001 00:00:00:00:00:03 => 0
+table_add tagout tag_action 00000010 00:00:00:00:00:02 => 1
+table_add tagout tag_action 00000010 00:00:00:00:00:04 => 1
+
+table_add tagout _drop 00000001 00:00:00:00:00:02 =>
+table_add tagout _drop 00000001 00:00:00:00:00:04 =>
+table_add tagout _drop 00000010 00:00:00:00:00:01 =>
+table_add tagout _drop 00000010 00:00:00:00:00:03 =>

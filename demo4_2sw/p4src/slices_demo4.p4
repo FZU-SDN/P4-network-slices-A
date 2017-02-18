@@ -1,5 +1,7 @@
 // Demo 4
 // Added by Chen, 2017/2/10
+// Changed by Chen, 2017/2/18
+
 // Based on l2switch
 
 //uncomment to enable openflow
@@ -135,14 +137,24 @@ table mcast_src_pruning {
     table_add tagin add_flag 00:00:00:00:00:02 => 00000010
     table_add tagin add_flag 00:00:00:00:00:04 => 00000010
 
-    table_add tagout tag_action 00000001 => 0
-    table_add tagout tag_action 00000002 => 1
+    table_add tagout tag_action [dstTag] [srcAddr] => [countnum]
+    table_add tagout _drop [dstTag] [srcAddr] =>
+
+    table_add tagout tag_action 00000001 00:00:00:00:00:01 => 0
+    table_add tagout tag_action 00000001 00:00:00:00:00:03 => 0
+    table_add tagout tag_action 00000010 00:00:00:00:00:02 => 1
+    table_add tagout tag_action 00000010 00:00:00:00:00:04 => 1
+
+    table_add tagout _drop 00000001 00:00:00:00:00:02 =>
+    table_add tagout _drop 00000001 00:00:00:00:00:04 =>
+    table_add tagout _drop 00000010 00:00:00:00:00:01 =>
+    table_add tagout _drop 00000010 00:00:00:00:00:03 =>
 
     counter_read tag_counter 0
     counter_read tag_counter 1
 
     table_add tagout _drop 00000001 => 
-    table_add tagout _drop 00000002 => 
+    table_add tagout _drop 00000010 => 
 
  ******************************/
 
@@ -185,6 +197,7 @@ action tag_action(index) {
 table tagout {
     reads {
         flag.tag : exact;
+        ethernet.srcAddr : exact;
     }
     actions {
         tag_action;
@@ -220,3 +233,4 @@ control egress {
     process_ofpat_egress();
 #endif /*OPENFLOW_ENABLE */
 }
+
