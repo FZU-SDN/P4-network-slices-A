@@ -35,7 +35,7 @@ h4 -> X X X
 *** Results: 100% dropped (0/12 received)
 ```
 
-3.打开新的终端，启动learn_client，交换机进行mac学习。
+3.打开两个新的终端A和B，分别启动s1、s2的learn_client，使两台交换机进行mac学习。
 
 ```
 cd learn_client_s1
@@ -63,48 +63,42 @@ h4 -> h1 h2 h3
 *** Results: 0% dropped (12/12 received)
 ```
 
-learn_client信息：
+> 附：也可以通过以下方式执行脚本下发流表使s1、s2及四台host正常通信(无需进行mac_learn)。
 
 ```
-I received 4 samples
-Calling callback function
-CB with 4 samples
-ingress port is 2
-ingress port is 3
-ingress port is 1
-ingress port is 4
+./add_entry.sh
+
+cd mclearn
+./mc_learn.sh
 ```
 
-4.执行脚本：
+5.执行脚本：
 
 ```
 cd slice
 ./start_virtual.sh
 ```
 
-启动两个租户A、B。
+启动两个租户A、B，同时记录流表handle信息。
 
-同时记录下handle信息：
-
-```
-RuntimeCmd: Adding entry to exact match table tagout
-match key:           EXACT-01
-action:              tag_action
-runtime data:        00:00:00:00
-Entry has been added with handle 0
-RuntimeCmd: Adding entry to exact match table tagout
-match key:           EXACT-08
-action:              tag_action
-runtime data:        00:00:00:01
-Entry has been added with handle 1
-```
-可以看到，流表handle分别为0和1。
-
-租户A使用host 1、2；租户B使用host 3、4.
+租户A使用host 1、2；租户B使用host 3、4。
 
 当交换机接收到来自租户A、B的数据报时，打上tag1、tag2，并对其进行计数。
 
-5.打开cmd控制界面下发运行时命令：
+**不同租户之间不能通信。**
+
+```
+mininet> pingall
+*** Ping: testing ping reachability
+h1 -> X h3 X 
+h2 -> X X h4 
+h3 -> h1 X X 
+h4 -> X h2 X 
+*** Results: 66% dropped (4/12 received)
+mininet>
+```
+
+6.打开cmd控制界面下发运行时命令：
 
 ```
 ./simple_switch_CLI --thrift-port 22222
@@ -115,12 +109,12 @@ Entry has been added with handle 1
 ```
 RuntimeCmd: counter_read tag_counter 0
 tag_counter[0]=  BmCounterValue(packets=0, bytes=0)
+
 RuntimeCmd: counter_read tag_counter 1
 tag_counter[1]=  BmCounterValue(packets=0, bytes=0)
-RuntimeCmd: 
 ```
 
-6.在mininet中执行：
+7.在mininet中执行：
 
 ```
 mininet> h1 ping h3
@@ -140,7 +134,7 @@ tag_counter[0]=  BmCounterValue(packets=90, bytes=8596)
 ···
 ```
 
-7.当计数器显示超过一百个包时，从运行时命令行下发运行时命令，阻断h1与h3之间的通信。
+8.当计数器显示超过一百个包时，从运行时命令行下发运行时命令，阻断h1与h3之间的通信。
 
 计数器超过100个包：
 
@@ -150,20 +144,27 @@ RuntimeCmd: counter_read tag_counter 0
 tag_counter[0]=  BmCounterValue(packets=104, bytes=9856)
 ```
 
-下发命令：
+下发命令。启动cmd界面：
 
-a.根据handle删除原有表项：
+```
+sudo ./simple_switch_CLI --thrift-port 22222
+```
+
+a.根据handle(tagout流表中handle为0和1)删除原有表项：
 
 ```
 RuntimeCmd: table_delete tagout 0
 Deleting entry 0 from tagout
 
+RuntimeCmd: table_delete tagout 1
+Deleting entry 1 from tagout
 ```
 
 b.添加表项，当接收的数据报是租户A的数据报时，丢弃。
 
 ```
-RuntimeCmd: table_add tagout _drop 00000001 => 
+cd apply_drop
+./drop.sh
 ```
 
 此时h1和h3无法正常通信，h2和h4正常通信。
@@ -179,7 +180,7 @@ h4 -> X h2 X
 mininet> 
 ```
 
-8.在mininet中使h2和h4进行通信，在cmd中查看计数器信息：
+9.在mininet中使h2和h4进行通信，在cmd中查看计数器信息：
 
 ```
 mininet> h2 ping h4

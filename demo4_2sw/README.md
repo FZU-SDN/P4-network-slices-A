@@ -85,7 +85,7 @@ cd slice
 ./start_virtual.sh
 ```
 
-启动两个租户A、B，同时记录流表handle信息(参考1sw)。
+启动两个租户A、B，同时记录流表handle信息。
 
 租户A使用host 1、2；租户B使用host 3、4.
 
@@ -162,7 +162,7 @@ sudo ./simple_switch_CLI --thrift-port 22222
 sudo ./simple_switch_CLI --thrift-port 22223
 ```
 
-a.根据handle删除原有表项(注意：必须将s1和s2的表项都删除，否则会造成Duplicate Entries异常)：
+a.根据handle删除原有表项(tagout流表中handle为0和1；注意：必须将s1和s2的表项都删除，否则会造成Duplicate Entries异常)：
 
 ```
 RuntimeCmd: table_delete tagout 0

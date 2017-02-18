@@ -5,4 +5,4 @@ table_add smac _nop 00:00:00:00:00:04 =>
 table_add dmac forward 00:00:00:00:00:01 => 01
 table_add dmac forward 00:00:00:00:00:02 => 02
 table_add dmac forward 00:00:00:00:00:03 => 03
-table_add dmac forward 00:00:00:00:00:04 => 03
+table_add dmac forward 00:00:00:00:00:04 => 04
