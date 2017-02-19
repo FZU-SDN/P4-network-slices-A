@@ -1,8 +1,6 @@
 // Demo 5
-// Added by Chen, 2017-1-22
-
-// log:
-// changed by Chen, 2017-2-12
+// Added by Chen, 2017/2/8
+// Changed by Chen, 2017/2/19
 
 // Based on l2switch
 
@@ -12,6 +10,23 @@
 #ifdef OPENFLOW_ENABLE
     #include "openflow.p4"
 #endif /* OPENFLOW_ENABLE */
+
+/******************************
+    
+    commands:
+	Please see commands.txt.
+
+ ******************************/
+
+/******************************
+
+    Hint:
+    IP: 10.0.0.i
+    MAC: 00:00:00:00:00:0i
+
+    i: 1, 2, 3, 4, 5, 6
+    
+ ******************************/
 
 header_type ethernet_t {
     fields {
@@ -106,6 +121,49 @@ table mcast_src_pruning {
     size : 1;
 }
 
+/******************************
+    
+    cmds:
+
+    table_set_default tagin _nop
+    table_set_default tagout _nop
+
+    table_add tagin add_flag 00:00:00:00:00:01 00:00:00:00:00:04 => 00000001
+    table_add tagin add_flag 00:00:00:00:00:04 00:00:00:00:00:01 => 00000001
+    table_add tagin add_flag 00:00:00:00:00:02 00:00:00:00:00:05 => 00000010
+    table_add tagin add_flag 00:00:00:00:00:05 00:00:00:00:00:02 => 00000010
+    table_add tagin add_flag 00:00:00:00:00:03 00:00:00:00:00:06 => 00000011
+    table_add tagin add_flag 00:00:00:00:00:06 00:00:00:00:00:03 => 00000011
+
+    table_add tagout tag_action [dstTag] [srcAddr] => [countnum]
+    table_add tagout _drop [dstTag] [srcAddr] =>
+
+    s1(22222), s4(22225):
+
+    table_add tagout tag_action 00000001 => 0
+    table_add tagout tag_action 00000010 => 1
+    table_add tagout tag_action 00000011 => 2
+
+    s2(22223):
+
+    table_add tagout tag_action 00000001 => 0
+    table_add tagout tag_action 00000011 => 2
+    table_add tagout _drop 00000010 =>    
+
+    s3(22224):
+
+    table_add tagout tag_action 00000010 => 1
+    table_add tagout tag_action 00000011 => 2
+    table_add tagout _drop 00000001 =>   
+    
+    cnt:
+
+    counter_read tag_counter 0
+    counter_read tag_counter 1
+    counter_read tag_counter 2    
+
+ ******************************/
+
 /******************************/
 
 header_type flag_t {
@@ -124,6 +182,7 @@ action add_flag(value) {
 table tagin {
     reads {
         ethernet.dstAddr : exact;
+        ethernet.srcAddr : exact;
     }
     actions {
         add_flag;
@@ -160,7 +219,7 @@ control ingress {
     apply(packet_out) {
         nop {
 #endif /* OPENFLOW_ENABLE */
-	    apply(tagin);
+            apply(tagin);
             apply(smac);
             apply(dmac);
 #ifdef OPENFLOW_ENABLE
@@ -180,3 +239,5 @@ control egress {
     process_ofpat_egress();
 #endif /*OPENFLOW_ENABLE */
 }
+
+

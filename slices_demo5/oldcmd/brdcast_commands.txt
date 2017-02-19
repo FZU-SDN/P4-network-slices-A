@@ -1,3 +1,0 @@
-table_add dmac broadcast 00:00:00:00:00:01 =>
-table_add dmac broadcast 00:00:00:00:00:02 =>
-table_add dmac broadcast 00:00:00:00:00:03 =>

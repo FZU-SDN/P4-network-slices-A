@@ -12,6 +12,7 @@
 sudo ./simple_switch_CLI --thrift-port 22222 < commands.txt
 sudo ./simple_switch_CLI --thrift-port 22223 < commands.txt
 sudo ./simple_switch_CLI --thrift-port 22224 < commands.txt
+sudo ./simple_switch_CLI --thrift-port 22225 < commands.txt
 
 # oldcmds:
 # sudo ./simple_switch_CLI --thrift-port 22222 < commands_s1.txt
