@@ -196,12 +196,12 @@ mininet> h3 ping h6 -c 6
 s1
 
 ```
+RuntimeCmd: counter_read tag_counter 0
 tag_counter[0]=  BmCounterValue(packets=0, bytes=0)
 RuntimeCmd: counter_read tag_counter 1
 tag_counter[1]=  BmCounterValue(packets=49, bytes=4410)
 RuntimeCmd: counter_read tag_counter 2
 tag_counter[2]=  BmCounterValue(packets=74, bytes=6468)
-RuntimeCmd: counter_read tag_counter 3
 ```
 
 s2
