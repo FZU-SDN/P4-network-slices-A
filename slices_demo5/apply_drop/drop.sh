@@ -5,4 +5,4 @@
 
 sudo ./simple_switch_CLI --thrift-port 22222 < drop_A.txt
 sudo ./simple_switch_CLI --thrift-port 22223 < drop_A.txt
-sudo ./simple_switch_CLI --thrift-port 22224 < drop_A.txt
+sudo ./simple_switch_CLI --thrift-port 22225 < drop_A.txt
