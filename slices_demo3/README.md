@@ -85,8 +85,6 @@ table_add Match_Table count_action 10.0.0.10 => 0
 
 在CLI界面中执行`counter_read Indecounter 0`查看计数器实例0的信息。
 
-![](/Users/wasdns/Desktop/success.jpg)
-
 7.计数达到100个包之后执行丢包。
 
 在CLI中通过命令：
@@ -97,13 +95,9 @@ counter_read Indecounter 0
 查看计数器实例0的信息，发现超过100个包时，下发命令：
 
 ```
-table_add Apply Drop 10.0.0.10/32 0x0800 => 
+table_add Apply_Drop _drop 0x0800 10.0.0.10/32 => 
 ```
 使交换机执行丢包，此时h1无法ping通h2。
-
-![](/Users/wasdns/Desktop/达到100个包之后 无法ping通.jpg)
-
-![](/Users/wasdns/Library/Containers/com.tencent.qq/Data/Library/Application Support/QQ/Users/952693358/QQ/Temp.db/77A533B2-F7A0-4B02-A942-B421EE2314BE.png)
 
 ### 实验结论
 
