@@ -126,4 +126,45 @@ h3 -> h1
 0.0-60.2 sec 180Mbytes 25.0 Mbits/sec
 ```
 
-与测试一结果基本一致。
+## Test3 
+
+Cmp between normal ping and ping when stress test.
+
+1.normal 取样。mininet执行：
+
+```
+mininet> h2 ping h4 -c 20
+```
+
+result:
+
+```
+20 packets transmitted, 20 received, 0% packet loss, time 19043ms
+rtt min/avg/max/mdev = 1.076/2.100/4.407/0.972 ms
+```
+
+2.stress test 取样。启动压力测试：
+
+```
+h1: iperf -c 10.0.0.3 -t 60
+h3: iperf -s
+```
+
+result:
+
+```
+20 packets transmitted, 20 received, 0% packet loss, time 19031ms
+rtt min/avg/max/mdev = 15.667/26.162/59.783/10.453 ms
+```
+
+```
+h1 -> h3
+
+0.0-60.2 sec 135Mbytes 18.9 Mbits/sec
+
+h3 -> h1
+
+0.0-60.3 sec 135Mbytes 18.8 Mbits/sec
+```
+
+3.比较平均ping值，压力测试下ping值约为普通情况下的10倍。
