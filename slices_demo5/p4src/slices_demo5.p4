@@ -1,32 +1,60 @@
-// Demo 5
-// Added by Chen, 2017/2/8
-// Changed by Chen, 2017/2/19
+/**********************************
 
-// Based on l2switch
+    <Demo 5>
+    
+    Added by Chen, 2017/2/8
+    
+    Changed by Chen, 2017/2/19
+
+    Based on l2switch
+    
+ **********************************/
 
 //uncomment to enable openflow
 //#define OPENFLOW_ENABLE
+
+/* If you add the openflow for this demo, you should read the file named    */
+/* openflow.p4 in the repo p4ofagent. Based on your needs, you can choose   */
+/* to add some function that the openflow.p4 supported. For example, VLAN.  */
 
 #ifdef OPENFLOW_ENABLE
     #include "openflow.p4"
 #endif /* OPENFLOW_ENABLE */
 
-/******************************
-    
-    commands:
+/**********************************
+
 	Please see commands.txt.
 
- ******************************/
+ **********************************/
 
-/******************************
+/**********************************
 
-    Hint:
+                +===+
+    +-+         | 2 |         +-+
+    |1|---+ +---|   |---+ +---|4|
+    +-+   | |   +===+   | |   +-+
+         +===+         +===+
+    +-+  | 1 |         | 4 |  +-+
+    |2|--|   |         |   |--|5|
+    +-+  +===+         +===+  +-+
+          | |           | |
+    +-+   | |   +===+   | |   +-+
+    |3|---+ +---| 3 |---+ +---|6|
+    +-+         |   |         +-+
+                +===+
+
     IP: 10.0.0.i
     MAC: 00:00:00:00:00:0i
 
     i: 1, 2, 3, 4, 5, 6
     
- ******************************/
+ **********************************/
+
+/**********************************
+
+    Headers & Parsers Definitions
+    
+ **********************************/
 
 header_type ethernet_t {
     fields {
@@ -63,6 +91,12 @@ parser parse_ethernet {
     return ingress;
 #endif /* OPENFLOW_ENABLE */
 }
+
+/**********************************
+
+    Tables & Actions Definitions
+    
+ **********************************/
 
 action _drop() {
     drop();
@@ -121,9 +155,120 @@ table mcast_src_pruning {
     size : 1;
 }
 
-/******************************
+/* Special Tables and Actions Definations for Network Slices                */
+/* TODO: You can change some definitions of them if you are ready to trying */
+/* p4 programming.                                                          */
+/* For Instance, you can change the match key of the table tagin and tagout */
+
+header_type flag_t {
+    fields {
+        tag : 8;
+    }
+}
+
+header flag_t flag;
+
+/* The action add_flag is used to adding a header named "flag". Then change */
+/* the value of the field "tag" using the arg "value". As soon as the       */
+/* action is finished, the field "tag" can be used to be the match key of   */
+/* the flow table that your defined. You can see what I have done in the    */
+/* definition of table named "tagout" and the commands showed in the end of */
+/* this file.                                                               */
+
+action add_flag(value) {
+    add_header(flag);
+    modify_field(flag.tag, value);
+}
+
+table tagin {
+    reads {
+        ethernet.dstAddr : exact;
+        ethernet.srcAddr : exact;
+    }
+    actions {
+        add_flag;
+        _nop;
+    }
+}
+
+/* Counter Definitions                                                       */
+/* This Counter "tag_counter" is used to counting the tenants' packets.      */
+/* One thing should be noticed that, one counter instance records one        */
+/* tenant's packets. For example, the counter instance 0 records the packets */
+/* from tenant A, however, it cannot records the packets from tenant B.      */
+
+counter tag_counter {
+    type : packets;
+    static : tagout;
+    instance_count : 16384; //you can change the num of instance here
+}
+
+/* According to the match key of table tagout, the action "tagout" count     */
+/* the packets of special tenant, then remove the header "flag".             */
+
+action tag_action(index) {
+    count(tag_counter, index);
+    remove_header(flag);
+}
+
+table tagout {
+    reads {
+        flag.tag : exact;
+    }
+    actions {
+        tag_action;
+        _nop;
+        _drop;
+    }
+}
+
+/**********************************
+
+    Control Program Definitions
     
-    cmds:
+ **********************************/
+
+control ingress {
+#ifdef OPENFLOW_ENABLE
+    apply(packet_out) {
+        nop {
+#endif /* OPENFLOW_ENABLE */
+            apply(tagin);
+            apply(smac);
+            apply(dmac);
+#ifdef OPENFLOW_ENABLE
+        }
+    }
+    // you must call the function here if you are using openflow:
+    process_ofpat_ingress();
+#endif /* OPENFLOW_ENABLE */
+}
+
+control egress {
+    // the "if" block avoided the mess of learn_client 
+    if(standard_metadata.ingress_port == standard_metadata.egress_port) {
+        apply(mcast_src_pruning);
+    }
+    apply(tagout);
+#ifdef OPENFLOW_ENABLE
+    // you must call the function here if you are using openflow:
+    process_ofpat_egress();
+#endif /*OPENFLOW_ENABLE */
+}
+
+
+/* If you are interesting in the writing of runtime commands, please        */
+/* refer to the commands below, or you can find all commands that the CLI   */
+/* support by doing this:                                                   */
+
+/* First login to the simple_switch_CLI by using the thrift port of switch. */
+/* Then you ask the runtime commands by using the command: ?                */
+/* Like this:                                                               */
+/* Runtimecmd: ?                                                            */
+
+/**********************************
+
+    Reference - cmds:
 
     table_set_default tagin _nop
     table_set_default tagout _nop
@@ -162,82 +307,4 @@ table mcast_src_pruning {
     counter_read tag_counter 1
     counter_read tag_counter 2    
 
- ******************************/
-
-/******************************/
-
-header_type flag_t {
-    fields {
-        tag : 8;
-    }
-}
-
-header flag_t flag;
-
-action add_flag(value) {
-    add_header(flag);
-    modify_field(flag.tag, value);
-}
-
-table tagin {
-    reads {
-        ethernet.dstAddr : exact;
-        ethernet.srcAddr : exact;
-    }
-    actions {
-        add_flag;
-        _nop;
-    }
-}
-
-counter tag_counter {
-    type : packets;
-    static : tagout;
-    instance_count : 16384;
-}
-
-action tag_action(index) {
-    count(tag_counter, index);
-    remove_header(flag);
-}
-
-table tagout {
-    reads {
-        flag.tag : exact;
-    }
-    actions {
-        tag_action;
-        _nop;
-        _drop;
-    }
-}
-
-/******************************/
-
-control ingress {
-#ifdef OPENFLOW_ENABLE
-    apply(packet_out) {
-        nop {
-#endif /* OPENFLOW_ENABLE */
-            apply(tagin);
-            apply(smac);
-            apply(dmac);
-#ifdef OPENFLOW_ENABLE
-        }
-    }
-
-    process_ofpat_ingress();
-#endif /* OPENFLOW_ENABLE */
-}
-
-control egress {
-    if(standard_metadata.ingress_port == standard_metadata.egress_port) {
-        apply(mcast_src_pruning);
-    }
-    apply(tagout);
-#ifdef OPENFLOW_ENABLE
-    process_ofpat_egress();
-#endif /*OPENFLOW_ENABLE */
-}
-
-
+ **********************************/
