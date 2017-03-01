@@ -1,0 +1,9 @@
+digraph g {
+   wire [shape=doublecircle];
+   __table_tagin [label=tagin shape=doublecircle];
+   wire -> start
+   start [shape=record label="{start}"];
+   start -> parse_ethernet [label="default"];
+   parse_ethernet [shape=record label="{parse_ethernet}"];
+   parse_ethernet -> __table_tagin [label="default"];
+}

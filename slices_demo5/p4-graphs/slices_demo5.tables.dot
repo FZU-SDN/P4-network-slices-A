@@ -1,0 +1,24 @@
+digraph g {
+   buffer [shape=doublecircle];
+   egress [shape=doublecircle];
+   tagin [shape=ellipse];
+   tagin -> smac [arrowhead=normal label="add_flag"];
+   smac [shape=ellipse];
+   smac -> dmac [arrowhead=normal label="mac_learn"];
+   dmac [shape=ellipse];
+   dmac -> buffer [arrowhead=normal label="forward"];
+   dmac -> buffer [arrowhead=normal label="broadcast"];
+   smac -> dmac [arrowhead=normal label="_nop"];
+   tagin -> smac [arrowhead=normal label="_nop"];
+   buffer -> _condition_0
+   _condition_0 [shape=box label="(standard_metadata.ingress_port == standard_metadata.egress_port)"];
+   _condition_0 -> tagout [arrowhead=odot];
+   tagout [shape=ellipse];
+   tagout -> egress [arrowhead=normal label="tag_action"];
+   tagout -> egress [arrowhead=normal label="_nop"];
+   tagout -> egress [arrowhead=normal label="_drop"];
+   _condition_0 -> mcast_src_pruning [arrowhead=dot];
+   mcast_src_pruning [shape=ellipse];
+   mcast_src_pruning -> tagout [arrowhead=normal label="_nop"];
+   mcast_src_pruning -> tagout [arrowhead=normal label="_drop"];
+}

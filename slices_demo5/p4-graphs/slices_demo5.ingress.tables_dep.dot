@@ -1,0 +1,4 @@
+digraph ingress {
+tagin -> smac [style=dotted ];
+smac -> dmac [style=dotted ];
+}

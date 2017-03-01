@@ -1,0 +1,6 @@
+digraph egress {
+_condition_0 [shape=box label="_condition_0\n(standard_metadata.ingress_port == standard_metadata.egress_port)"];
+mcast_src_pruning -> tagout [style=dotted ];
+_condition_0 -> mcast_src_pruning [color=green label="" decorate=true arrowhead = dot];
+_condition_0 -> tagout [style=dotted ];
+}
