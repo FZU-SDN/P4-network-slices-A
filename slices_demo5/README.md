@@ -1,5 +1,17 @@
 ## Demo 5 README
 
+Related Works: [demo4_2sw](https://github.com/Emil-501/P4-network-slices-A/tree/master/demo4_2sw)
+
+## Web
+
+Github: [Web for slicing](https://github.com/Emil-501/web_for_slice)
+
+This repo(i.e.Web for slicing) is used to abstract the runtime_CLI (i.e. simple_switch_CLI) which is used in our repo named P4-network-slices-A. It’s easy to operate and we change the way we used before to insert the flow entries to specific switch.
+
+The web is made of two major part. The first one is the static topologic boundary, we made it easy to program. The second part is we abstracted the script that is used in our demo into buttons which is easy to call. 
+
+## Topo
+
 ```
             +===+
 +-+         | 2 |         +-+
@@ -16,7 +28,7 @@
             +===+
 ```
 
-## 准备
+## Preparation
 
 1.拓扑信息：
 
@@ -246,6 +258,10 @@ RuntimeCmd:
 ```
 ./finish.py
 ```
+
+## Nmap test
+
+See directory: `Nmap test`
 
 ## 结论：
 
