@@ -175,7 +175,7 @@ header flag_t flag;
 /* definition of table named "tagout" and the commands showed in the end of */
 /* this file.                                                               */
 
-action add_flag(value) {
+action add_tag(value) {
     add_header(flag);
     modify_field(flag.tag, value);
 }
@@ -186,7 +186,7 @@ table tagin {
         ethernet.srcAddr : exact;
     }
     actions {
-        add_flag;
+        add_tag;
         _nop;
     }
 }
