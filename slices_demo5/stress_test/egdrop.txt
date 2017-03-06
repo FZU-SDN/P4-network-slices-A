@@ -1,0 +1,5 @@
+table_delete tagout 0
+table_delete tagout 1
+table_add tagout _drop 00000001 =>
+table_add tagout _drop 00000010 =>
+counter_reset tag_counter
