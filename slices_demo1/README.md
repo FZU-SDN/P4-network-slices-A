@@ -342,165 +342,90 @@ table_add Count_Table Read_Register 00000101 => 1
 
 ```
 parsing successful
-
 semantic checking successful
-
 Header type standard_metadata_t not byte-aligned, adding padding
-
 Generating json output to /home/wasdns/P4Slices/Sample/Sample_sourcerouting/source_routing.json
-
 *** Creating network
-
 *** Adding hosts:
-
 h1 h2 h3 
-
 *** Adding switches:
-
 s1 s2 s3 
-
 *** Adding links:
-
 (h1, s1) (h2, s2) (h3, s3) (s1, s2) (s1, s3) (s2, s3) 
-
 *** Configuring hosts
-
 h1 h2 h3 
-
 *** Starting controller
 
 *** Starting 3 switches
-
 s1 Starting P4 switch s1
-
 /home/wasdns/bmv2/targets/simple_switch/simple_switch -i 1@s1-eth1 -i 2@s1-eth2 -i 3@s1-eth3 --pcap --thrift-port 22222 --nanolog ipc:///tmp/bm-0-log.ipc --device-id 0 source_routing.json
-
 switch has been started
-
 s2 Starting P4 switch s2
-
 /home/wasdns/bmv2/targets/simple_switch/simple_switch -i 1@s2-eth1 -i 2@s2-eth2 -i 3@s2-eth3 --pcap --thrift-port 22223 --nanolog ipc:///tmp/bm-1-log.ipc --device-id 1 source_routing.json
-
 switch has been started
-
 s3 Starting P4 switch s3
-
 /home/wasdns/bmv2/targets/simple_switch/simple_switch -i 1@s3-eth1 -i 2@s3-eth2 -i 3@s3-eth3 --pcap --thrift-port 22224 --nanolog ipc:///tmp/bm-2-log.ipc --device-id 2 source_routing.json
-
 switch has been started
 
 /sbin/ethtool --offload eth0 rx off
-
 /sbin/ethtool --offload eth0 tx off
-
 /sbin/ethtool --offload eth0 sg off
-
 disable ipv6
-
 /sbin/ethtool --offload eth0 rx off
-
 /sbin/ethtool --offload eth0 tx off
-
 /sbin/ethtool --offload eth0 sg off
-
 disable ipv6
-
 /sbin/ethtool --offload eth0 rx off
-
 /sbin/ethtool --offload eth0 tx off
-
 /sbin/ethtool --offload eth0 sg off
-
 disable ipv6
-
 /home/wasdns/bmv2/tools/runtime_CLI.py --json source_routing.json --thrift-port 22222
-
 Control utility for runtime P4 table manipulation
-
 RuntimeCmd: Setting default action of Count_Table
-
 action:              _drop
-
 runtime data:        
-
 RuntimeCmd: Setting default action of route_pkt
-
 action:              route
-
 runtime data:        
-
 RuntimeCmd: Adding entry to exact match table Count_Table
-
 match key:           EXACT-41
-
 action:              Read_Register
-
 runtime data:        00:00:00:01
-
 Entry has been added with handle 0
-
 RuntimeCmd: 
 
 /home/wasdns/bmv2/tools/runtime_CLI.py --json source_routing.json --thrift-port 22223
-
 Control utility for runtime P4 table manipulation
-
 RuntimeCmd: Setting default action of Count_Table
-
 action:              _drop
-
 runtime data:        
-
 RuntimeCmd: Setting default action of route_pkt
-
 action:              route
-
 runtime data:        
-
 RuntimeCmd: Adding entry to exact match table Count_Table
-
 match key:           EXACT-41
-
 action:              Read_Register
-
 runtime data:        00:00:00:01
-
 Entry has been added with handle 0
-
 RuntimeCmd: 
 
 /home/wasdns/bmv2/tools/runtime_CLI.py --json source_routing.json --thrift-port 22224
-
 Control utility for runtime P4 table manipulation
-
 RuntimeCmd: Setting default action of Count_Table
-
 action:              _drop
-
 runtime data:        
-
 RuntimeCmd: Setting default action of route_pkt
-
 action:              route
-
 runtime data:        
-
 RuntimeCmd: Adding entry to exact match table Count_Table
-
 match key:           EXACT-41
-
 action:              Read_Register
-
 runtime data:        00:00:00:01
-
 Entry has been added with handle 0
-
 RuntimeCmd: 
 
 Ready !
-
 *** Starting CLI:
-
 mininet> 
 ```
 
