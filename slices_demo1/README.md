@@ -12,25 +12,25 @@ Before proceeding to the next step, please read the production of the Github pro
 
 ## Principle 原理
 
-1. The EasyRoute Protocol packet used in the experiment is structured as follows:
+1.The EasyRoute Protocol packet used in the experiment is structured as follows:
 
-   实验中使用的 EasyRoute Protocol 数据报结构如下：
+  实验中使用的 EasyRoute Protocol 数据报结构如下：
 ```
 preamble (8 bytes) | num_valid (4 bytes) | port_1 (1 byte) | port_2 (1 byte) |
 ... | port_n (1 byte) | payload
 ```
 
-2. Topo：
+2.Topo：
 
-   拓扑
+  拓扑
 
-3. Introduction:
+3.Introduction:
 
-   介绍：
+  介绍：
 
-   This experiment was based on the original P4 program provided by Barefoot, and making some changes.
+  This experiment was based on the original P4 program provided by Barefoot, and making some changes.
 
-   本实验首先基于Barefoot提供的原始P4程序，进行了相关的改动。
+  本实验首先基于Barefoot提供的原始P4程序，进行了相关的改动。
 
 the original P4 program as follow:
 
@@ -124,21 +124,21 @@ control egress {
 
 **改动：**
 
-1. Add a register `Register_Count` and set it to the **direct** state.
+1.Add a register `Register_Count` and set it to the **direct** state.
 
-   增加一个寄存器`Register_Count`，并设置为direct状态。
+  增加一个寄存器`Register_Count`，并设置为direct状态。
 
-2. Add a flow table named `Count_Table`, the flow table contains the action `_drop` and `Read_Register`. The flow table matches the port，and add a flow entry by **command.txt** (or **Runtime_CLI**) : if the field `easyroute_port` matches 3, the action `Read_Register` is executed; the default aciton `_drop` is set ,  the packet is droped when no entry is  matched.
+2.Add a flow table named `Count_Table`, the flow table contains the action `_drop` and `Read_Register`. The flow table matches the port，and add a flow entry by **command.txt** (or **Runtime_CLI**) : if the field `easyroute_port` matches 3, the action `Read_Register` is executed; the default aciton `_drop` is set ,  the packet is droped when no entry is  matched.
 
-   增加一张名为Count_Table的流表，流表内含动作`_drop`与`Read_Register`。该流表根据端口进行匹配，通过command.txt(或者Runtime_CLI)增加一条表项：倘若字段easyroute_port与3相匹配，执行动作`Read_Register`；同时设置默认动作`_drop`，当没有匹配到表项时执行丢包。
+  增加一张名为Count_Table的流表，流表内含动作`_drop`与`Read_Register`。该流表根据端口进行匹配，通过command.txt(或者Runtime_CLI)增加一条表项：倘若字段easyroute_port与3相匹配，执行动作`Read_Register`；同时设置默认动作`_drop`，当没有匹配到表项时执行丢包。
 
-3. Action `Read_Register`: Logs the information in the register into the metadata.
+3.Action `Read_Register`: Logs the information in the register into the metadata.
 
-   动作`Read_Register`：将寄存器中的信息记录到元数据中。
+  动作`Read_Register`：将寄存器中的信息记录到元数据中。
 
-4. Control program: look up the table `Count_Table`  first, and then through the `if`  statement to determine whether the register recorded in metadata is equal to 0 : Yes to route, not the words do not route.
+4.Control program: look up the table `Count_Table`  first, and then through the `if`  statement to determine whether the register recorded in metadata is equal to 0 : Yes to route, not the words do not route.
 
-   流控制程序：先查找表`Count_Table`，之后通过if语句判断元数据中记录的寄存器信息是否等于0：是的话执行路由，不是的话不执行路由
+  流控制程序：先查找表`Count_Table`，之后通过if语句判断元数据中记录的寄存器信息是否等于0：是的话执行路由，不是的话不执行路由
 
   P4 program which is modified:
 
@@ -318,13 +318,13 @@ Before executing this experiment, please complete the blog :the content of [Run 
 
 改动：
 
-1. p4src
+1.p4src
 
-   Add the above P4 program to the directory p4src , named `source_routing.p4`
+  Add the above P4 program to the directory p4src , named `source_routing.p4`
 
-   请将上文中的P4程序添加到目录p4src中，命名为`source_routing.p4`
+  请将上文中的P4程序添加到目录p4src中，命名为`source_routing.p4`
 
-2. commant.txt:
+2.commant.txt:
 
 ```
 table_set_default Count_Table _drop
@@ -336,9 +336,9 @@ table_add Count_Table Read_Register 00000101 => 1
 
 ### mininet:
 
-1. Execute  `./run_demo.sh`：
+1.Execute  `./run_demo.sh`：
  
-   执行`./run_demo.sh`：
+  执行`./run_demo.sh`：
 
 ```
 parsing successful
@@ -504,33 +504,33 @@ Ready !
 mininet> 
 ```
 
-2. Open xterm of h1 and h2：
+2.Open xterm of h1 and h2：
 
-   打开h1，h3的xterm：
+  打开h1，h3的xterm：
 
 ```
 mininet> xterm h1 h3
 ```
 
-3. Execute in the terminal of h3:
+3.Execute in the terminal of h3:
 
-   在h3的终端中执行：
+  在h3的终端中执行：
 
 ```
 ./receive.py
 ```
 
-4. Execute in the terminal of h1:
+4.Execute in the terminal of h1:
 
-   在h1的终端中执行：
+  在h1的终端中执行：
 
 ```
 ./send.py h1 h3
 ```
 
-5. Input `Hello` in the terminal of h1 , and `Hello` appears in the terminal of h3.
+5.Input `Hello` in the terminal of h1 , and `Hello` appears in the terminal of h3.
 
-   在h1的终端中输入`Hello`，在h3的终端中出现“Hello”字样。
+  在h1的终端中输入`Hello`，在h3的终端中出现“Hello”字样。
 
 ## Comparative experiment 对比实验
 
