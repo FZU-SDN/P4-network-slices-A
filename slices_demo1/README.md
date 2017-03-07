@@ -14,7 +14,7 @@ Before proceeding to the next step, please read the production of the Github pro
 
 1. The EasyRoute Protocol packet used in the experiment is structured as follows:
 
-实验中使用的 EasyRoute Protocol 数据报结构如下：
+   实验中使用的 EasyRoute Protocol 数据报结构如下：
 
 ```
 preamble (8 bytes) | num_valid (4 bytes) | port_1 (1 byte) | port_2 (1 byte) |
@@ -25,7 +25,7 @@ preamble (8 bytes) | num_valid (4 bytes) | port_1 (1 byte) | port_2 (1 byte) |
 
 ​      拓扑
 
-3. Introduction
+3. Introduction:
 
    介绍：
 
@@ -535,6 +535,30 @@ mininet> xterm h1 h3
    在h1的终端中输入`Hello`，在h3的终端中出现“Hello”字样。
 
 ## Comparative experiment 对比实验
+
+```
+mininet> xterm h1 h3
+```
+
+3. Execute in the terminal of h3:
+
+   在h3的终端中执行：
+
+```
+./receive.py
+```
+
+4. Execute in the terminal of h1:
+
+   在h1的终端中执行：
+
+```
+./send.py h1 h3
+```
+
+5. Input `Hello` in the terminal of h1 , and `Hello` appears in the terminal of h3.
+
+   在h1的终端中输入`Hello`，在h3的终端中出现“Hello”字样。
 
 Restart, then change the control program of P4 program to:
 
