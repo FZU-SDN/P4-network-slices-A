@@ -503,7 +503,6 @@ Ready !
 *** Starting CLI:
 
 mininet> 
-
 ```
 
 2. Open xterm of h1 and h2：
