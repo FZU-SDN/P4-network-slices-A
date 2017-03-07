@@ -4,7 +4,7 @@
 
 This article is based on the principle of Github open source P4Demo: Source_Routing.
 
-Before proceeding to the next step, please read the production of the Github project : [Github: SourceRouting](https://github.com/p4lang/tutorials/tree/master/SIGCOMM_2015#exercise-1-source-routing)
+Before proceeding to the next step, please read the introduction of the Github project : [Github: SourceRouting](https://github.com/p4lang/tutorials/tree/master/SIGCOMM_2015#exercise-1-source-routing)
 
 本文基于Github开源P4Demo：Source_Routing的原理进行实验。
 
@@ -128,9 +128,9 @@ control egress {
 
   增加一个寄存器`Register_Count`，并设置为direct状态。
 
-2.Add a flow table named `Count_Table`, the flow table contains the action `_drop` and `Read_Register`. The flow table matches the port，and add a flow entry by **command.txt** (or **Runtime_CLI**) : if the field `easyroute_port` matches 3, the action `Read_Register` is executed; the default aciton `_drop` is set ,  the packet is droped when no entry is  matched.
+2.Add a flow table named `Count_Table`, the flow table contains the action `_drop` and `Read_Register`. The incoming packets are matched by its port number. We deployed the runtime commands to the switch so that the switch can generate flow entries to execute actions for matched packets. The action `Read_Register` executed as soon as the field `easyroute_port` of the incoming packet was the port 3. The switch drop the packet which is the default action of the flow table if the packet didn't find its matched entry.
 
-  增加一张名为Count_Table的流表，流表内含动作`_drop`与`Read_Register`。该流表根据端口进行匹配，通过command.txt(或者Runtime_CLI)增加一条表项：倘若字段easyroute_port与3相匹配，执行动作`Read_Register`；同时设置默认动作`_drop`，当没有匹配到表项时执行丢包。
+  增加一张名为Count_Table的流表，流表内含动作`_drop`与`Read_Register`。该流表根据端口进行匹配：倘若字段easyroute_port与3相匹配，执行动作`Read_Register`；同时设置默认动作`_drop`，当没有匹配到表项时执行丢包。
 
 3.Action `Read_Register`: Logs the information in the register into the metadata.
 
@@ -512,7 +512,7 @@ mininet>
 mininet> xterm h1 h3
 ```
 
-3.Execute in the terminal of h3:
+3.Execute the command in the terminal of h3:
 
   在h3的终端中执行：
 
@@ -520,7 +520,7 @@ mininet> xterm h1 h3
 ./receive.py
 ```
 
-4.Execute in the terminal of h1:
+4.Execute the command in the terminal of h1:
 
   在h1的终端中执行：
 
@@ -552,7 +552,7 @@ control ingress
 
 Re-implementation of the above steps of the experimental phenomenon: in h1 to send information, h3 can not receive.
 
-重新执行上文步骤的实验现象：在h1中发送信息，h3无法接收。
+重新执行上述实验步骤，观察得到实验现象：在h1中发送信息，h3无法接收。
 
 ## Conclusion 实验结论
 
