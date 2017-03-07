@@ -1,26 +1,38 @@
 # Demo1 README
 
-## 前言：
+## Preface 前言
+
+This article is based on the principle of Github open source P4Demo: Source_Routing.
+
+Before proceeding to the next step, please read the introduction of the Github project : [Github: SourceRouting](https://github.com/p4lang/tutorials/tree/master/SIGCOMM_2015#exercise-1-source-routing)
+
 本文基于Github开源P4Demo：Source_Routing的原理进行实验。
 
 在进行接下来的步骤之前，请阅读Github项目介绍：[Github: SourceRouting](https://github.com/p4lang/tutorials/tree/master/SIGCOMM_2015#exercise-1-source-routing)
 
-## 原理：
+## Principle 原理
 
-1.实验中使用的 EasyRoute Protocol 数据报结构如下：
+1.The EasyRoute Protocol packet used in the experiment is structured as follows:
 
+  实验中使用的 EasyRoute Protocol 数据报结构如下：
 ```
 preamble (8 bytes) | num_valid (4 bytes) | port_1 (1 byte) | port_2 (1 byte) |
 ... | port_n (1 byte) | payload
 ```
 
-2.实验拓扑：
+2.Topo：
 
-![](/Users/wasdns/Library/Containers/com.tencent.qq/Data/Library/Application Support/QQ/Users/952693358/QQ/Temp.db/BBB7676B-8194-4491-A6A9-EB8059E3E027.png)
+  拓扑
 
-3.介绍：
+3.Introduction:
 
-本实验首先基于Barefoot提供的原始P4程序，进行了相关的改动。
+  介绍：
+
+  This experiment was based on the original P4 program provided by Barefoot, and making some changes.
+
+  本实验首先基于Barefoot提供的原始P4程序，进行了相关的改动。
+
+the original P4 program as follow:
 
 原始P4程序如下：
 
@@ -108,17 +120,29 @@ control egress {
 }
 ```
 
+**modification**:
+
 **改动：**
 
-1.增加一个寄存器`Register_Count`，并设置为direct状态。
+1.Add a register `Register_Count` and set it to the **direct** state.
 
-2.增加一张名为Count_Table的流表，流表内含动作`_drop`与`Read_Register`。该流表根据端口进行匹配，通过command.txt(或者Runtime_CLI)增加一条表项：倘若字段easyroute_port与3相匹配，执行动作`Read_Register`；同时设置默认动作`_drop`，当没有匹配到表项时执行丢包。
+  增加一个寄存器`Register_Count`，并设置为direct状态。
 
-3.动作`Read_Register`：将寄存器中的信息记录到元数据中。
+2.Add a flow table named `Count_Table`, the flow table contains the action `_drop` and `Read_Register`. The incoming packets are matched by its port number. We deployed the runtime commands to the switch so that the switch can generate flow entries to execute actions for matched packets. The action `Read_Register` executed as soon as the field `easyroute_port` of the incoming packet was the port 3. The switch drop the packet which is the default action of the flow table if the packet didn't find its matched entry.
 
-4.流控制程序；先查找表`Count_Table`，之后通过if语句判断元数据中记录的寄存器信息是否等于0：是的话执行路由，不是的话不执行路由。
+  增加一张名为Count_Table的流表，流表内含动作`_drop`与`Read_Register`。该流表根据端口进行匹配：倘若字段easyroute_port与3相匹配，执行动作`Read_Register`；同时设置默认动作`_drop`，当没有匹配到表项时执行丢包。
 
-改动后的P4程序：
+3.Action `Read_Register`: Logs the information in the register into the metadata.
+
+  动作`Read_Register`：将寄存器中的信息记录到元数据中。
+
+4.Control program: look up the table `Count_Table`  first, and then through the `if`  statement to determine whether the register recorded in metadata is equal to 0 : Yes to route, not the words do not route.
+
+  流控制程序：先查找表`Count_Table`，之后通过if语句判断元数据中记录的寄存器信息是否等于0：是的话执行路由，不是的话不执行路由
+
+  P4 program which is modified:
+
+  改动后的P4程序：
 
 ```
 /*
@@ -282,30 +306,39 @@ control ingress
 control egress {
     // leave empty
 }
-
 ```
 
-## 实验步骤
+## Experimental steps 实验步骤
+
+Before executing this experiment, please complete the blog :the content of [Run P4 without p4factory](http://www.cnblogs.com/qq952693358/p/6195385.html) .
 
 在执行本实验之前，请先完成博客：[Run P4 without p4factory](http://www.cnblogs.com/qq952693358/p/6195385.html) 的内容。
 
-### 改动：
+### modification:
 
-1.p4src：
+改动：
 
-请将上文中的P4程序添加到目录p4src中，命名为source_routing.p4
+1.p4src
 
-2.command.txt:
+  Add the above P4 program to the directory p4src , named `source_routing.p4`
+
+  请将上文中的P4程序添加到目录p4src中，命名为`source_routing.p4`
+
+2.commant.txt:
 
 ```
 table_set_default Count_Table _drop
+
 table_set_default route_pkt route
+
 table_add Count_Table Read_Register 00000101 => 1
 ```
 
-### Mininet：
+### mininet:
 
-1.执行./run_demo.sh：
+1.Execute  `./run_demo.sh`：
+ 
+  执行`./run_demo.sh`：
 
 ```
 parsing successful
@@ -396,29 +429,37 @@ Ready !
 mininet> 
 ```
 
-2.打开h1，h3的xterm：
+2.Open xterm of h1 and h2：
+
+  打开h1，h3的xterm：
 
 ```
 mininet> xterm h1 h3
 ```
 
-3.在h3的终端中执行：
+3.Execute the command in the terminal of h3:
+
+  在h3的终端中执行：
 
 ```
 ./receive.py
 ```
 
-4.在h1的终端中执行：
+4.Execute the command in the terminal of h1:
+
+  在h1的终端中执行：
 
 ```
 ./send.py h1 h3
 ```
 
-5.在h1的终端中输入`Hello`，在h3的终端中出现“Hello”字样。
+5.Input `Hello` in the terminal of h1 , and `Hello` appears in the terminal of h3.
 
-![](/Users/wasdns/Desktop/截图 2017-01-12 00时28分44秒.jpg)
+  在h1的终端中输入`Hello`，在h3的终端中出现“Hello”字样。
 
-### 对比实验
+## Comparative experiment 对比实验
+
+Restart, then change the control program of P4 program to:
 
 重启，将P4程序中的流控制程序改为：
 
@@ -434,13 +475,17 @@ control ingress
 }
 ```
 
-重新执行上文步骤的实验现象：在h1中发送信息，h3无法接收。
+Re-implementation of the above steps of the experimental phenomenon: in h1 to send information, h3 can not receive.
 
-## 实验结论
+重新执行上述实验步骤，观察得到实验现象：在h1中发送信息，h3无法接收。
+
+## Conclusion 实验结论
+
+This experiment is a validated test that verifies the following function: The incoming packets would be routed when the field `easyroute_port` of the incoming packet was the port 3; otherwise,it would be dropped by the switch. 
 
 本实验为验证性实验，验证以下功能：只有当当前数据报的端口为3时，才执行路由；否则执行丢包。
 
+In the experiment, the P4 switch allocates the configuration generated by the P4 program and adds the entry to the flow table according to the runtime CLI.
+
 实验中，P4交换机部署P4程序生成的相关配置，同时根据运行时CLI为流表添加表项。
 
-
-2017.1.12 Chen
