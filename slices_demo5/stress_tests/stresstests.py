@@ -16,7 +16,7 @@
 # -b => bandwidth bits/sec 
 
 # Commands of Iperf:
-# Client: iperf -c 10.0.0.i(i <= server) -p 5001 -f 10.5m -t 60 -i 1
+# Client: iperf -c 10.0.0.i(i <= server) -p 5001 -f 10.5m -t 180 -i 1
 # Server: iperf -s
 
 import time
