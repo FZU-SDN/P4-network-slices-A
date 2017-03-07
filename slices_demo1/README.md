@@ -481,7 +481,7 @@ Re-implementation of the above steps of the experimental phenomenon: in h1 to se
 
 ## Conclusion 实验结论
 
-This experiment is a validated experiment, verify the following functions: routing is performed only when the packet's port is 3; otherwise, packet loss is performed.
+This experiment is a validated test that verifies the following function: The coming packets would be routed when the field `easyroute_port` of the incoming packet was the port 3; otherwise,the coming packet would be dropped by the switch. 
 
 本实验为验证性实验，验证以下功能：只有当当前数据报的端口为3时，才执行路由；否则执行丢包。
 
