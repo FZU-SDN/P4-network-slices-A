@@ -12,7 +12,7 @@ Before proceeding to the next step, please read the production of the Github pro
 
 ## Principle 原理
 
-1.The EasyRoute Protocol packet used in the experiment is structured as follows:
+1. The EasyRoute Protocol packet used in the experiment is structured as follows:
 
    实验中使用的 EasyRoute Protocol 数据报结构如下：
 
@@ -21,12 +21,10 @@ preamble (8 bytes) | num_valid (4 bytes) | port_1 (1 byte) | port_2 (1 byte) |
 ... | port_n (1 byte) | payload
 ```
 
-2.Topo：
+2. Topo：
+   拓扑
 
-​   拓扑
-
-3.Introduction:
-
+3. Introduction:
    介绍：
 
    This experiment was based on the original P4 program provided by Barefoot, and making some changes.
@@ -337,9 +335,9 @@ table_add Count_Table Read_Register 00000101 => 1
 
 ### mininet:
 
-  1.Execute  `./run_demo.sh`：
-
-​     执行`./run_demo.sh`：
+1. Execute  `./run_demo.sh`：
+ 
+   执行`./run_demo.sh`：
 
 ```
 parsing successful
@@ -505,35 +503,9 @@ Ready !
 mininet> 
 ```
 
-  2.Open xterm of h1 and h2：
+2. Open xterm of h1 and h2：
 
-​     打开h1，h3的xterm：
-
-```
-mininet> xterm h1 h3
-```
-
-  3.Execute in the terminal of h3:
-
-​     在h3的终端中执行：
-
-```
-./receive.py
-```
-
-  4.Execute in the terminal of h1:
-
-​     在h1的终端中执行：
-
-```
-./send.py h1 h3
-```
-
-  5.Input `Hello` in the terminal of h1 , and `Hello` appears in the terminal of h3.
-
-​     在h1的终端中输入`Hello`，在h3的终端中出现“Hello”字样。
-
-## Comparative experiment 对比实验
+   打开h1，h3的xterm：
 
 ```
 mininet> xterm h1 h3
@@ -558,6 +530,8 @@ mininet> xterm h1 h3
 5. Input `Hello` in the terminal of h1 , and `Hello` appears in the terminal of h3.
 
    在h1的终端中输入`Hello`，在h3的终端中出现“Hello”字样。
+
+## Comparative experiment 对比实验
 
 Restart, then change the control program of P4 program to:
 
