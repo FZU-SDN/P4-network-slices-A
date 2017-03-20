@@ -13,7 +13,53 @@ If you are interested in it, you can refer to the script that opensourced in the
 
 2.Using the command below in the CLI to check the formats of runtime commands.
 
-Runtimecmd> ?
+RuntimeCmd> ?
+```
+
+```
+Documented commands (type help <topic>):
+========================================
+act_prof_add_member_to_group       set_crc16_parameters                   
+act_prof_create_group              set_crc32_parameters                   
+act_prof_create_member             set_queue_depth                        
+act_prof_delete_group              set_queue_rate                         
+act_prof_delete_member             shell                                  
+act_prof_dump                      show_actions                           
+act_prof_dump_group                show_ports                             
+act_prof_dump_member               show_tables                            
+act_prof_modify_member             swap_configs                           
+act_prof_remove_member_from_group  switch_info                            
+counter_read                       table_add                              
+counter_reset                      table_delete                           
+get_time_elapsed                   table_dump                             
+get_time_since_epoch               table_dump_entry                       
+help                               table_dump_entry_from_key              
+load_new_config_file               table_dump_group                       
+mc_dump                            table_dump_member                      
+mc_mgrp_create                     table_indirect_add                     
+mc_mgrp_destroy                    table_indirect_add_member_to_group     
+mc_node_associate                  table_indirect_add_with_group          
+mc_node_create                     table_indirect_create_group            
+mc_node_destroy                    table_indirect_create_member           
+mc_node_dissociate                 table_indirect_delete                  
+mc_node_update                     table_indirect_delete_group            
+mc_set_lag_membership              table_indirect_delete_member           
+meter_array_set_rates              table_indirect_modify_member           
+meter_get_rates                    table_indirect_remove_member_from_group
+meter_set_rates                    table_indirect_set_default             
+mirroring_add                      table_indirect_set_default_with_group  
+mirroring_delete                   table_info                             
+port_add                           table_modify                           
+port_remove                        table_num_entries                      
+register_read                      table_set_default                      
+register_reset                     table_set_timeout                      
+register_write                     table_show_actions                     
+reset_state                        write_config_to_file                   
+serialize_state                  
+
+Undocumented commands:
+======================
+EOF  greet
 ```
 
 ### Command Format
