@@ -1,0 +1,10 @@
+table_set_default tagout _drop
+table_add tagin add_tag 00:00:00:00:00:01 00:00:00:00:00:04 => 00000001
+table_add tagin add_tag 00:00:00:00:00:04 00:00:00:00:00:01 => 00000001
+table_add tagin add_tag 00:00:00:00:00:02 00:00:00:00:00:05 => 00000010
+table_add tagin add_tag 00:00:00:00:00:05 00:00:00:00:00:02 => 00000010
+table_add tagin add_tag 00:00:00:00:00:03 00:00:00:00:00:06 => 00000011
+table_add tagin add_tag 00:00:00:00:00:06 00:00:00:00:00:03 => 00000011
+table_add tagout tag_action 00000001 => 0
+table_add tagout tag_action 00000010 => 1
+table_add tagout tag_action 00000011 => 2
