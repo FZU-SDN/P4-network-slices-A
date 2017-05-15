@@ -1,0 +1,10 @@
+I
+¢µƒdmacdmachdr.ethernet.dstAddr 0(„‚È³€·¶@€b
+‰ƒtagintaginhdr.ethernet.dstAddr 0(hdr.ethernet.srcAddr 0(ƒ·¶@€C
+¢Ç‚tagouttagoutmeta.tag_meta.tag (·¶¤ÿ€@€
+·¶NoActionNoAction%
+„‚forwardforward
+port 	
+È³€	broadcast	broadcast&
+ƒadd_tagadd_tagvalue 
+¤ÿ€dropdrop
