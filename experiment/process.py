@@ -20,7 +20,7 @@ def plp():
 		i = i+1
 
 def band():
-	text = open('data4', "r") # open()
+	text = open('unslice.txt', "r") # open()
 	index = 0
 	i, j = 1, 1
 
@@ -34,9 +34,26 @@ def band():
 		print(j, line[l:(l+4)])
 		j = j+1
 
+def uband():
+	text = open('2.txt', "r") # open()
+	index = 0
+	i, j = 1, 1
+
+	for line in text.readlines():
+		if index%2 == 1:
+			index = index+1
+			continue
+		else:
+			if j >= 100:
+				print(j, line[36:40])
+			else :
+				print(j, line[34:39])
+		j = j+1
+		index = index+1
+
 def main():
-	plp()
-	#band()
+	#plp()
+	uband()
 
 if __name__ == '__main__':
 	main()
