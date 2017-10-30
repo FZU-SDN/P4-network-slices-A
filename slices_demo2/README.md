@@ -91,7 +91,7 @@ RuntimeCmd:
 3.在CLI中查看计数器信息：
 
 ```
-RuntimeCmd: counter_read counter_read Indecounter 0
+RuntimeCmd: counter_read Indecounter 0
 ```
 
 显示如下：
@@ -118,7 +118,7 @@ WARNING: No route found for IPv6 destination :: (no default route?)
 5.再次下发CLI命令，查看计数器信息：
 
 ```
-RuntimeCmd: counter_read counter_read Indecounter 0
+RuntimeCmd: counter_read Indecounter 0
 ```
 
 显示如下：
@@ -140,7 +140,7 @@ Indecounter[0]=  BmCounterValue(packets=0, bytes=0)
 ```
 重置成功。
 
-###实验结论：
+### 实验结论：
 
 我们能够借助本实验中作为控制平面的运行时CLI实时查看数据平面的交换机信息，通过指定thrift服务端口能够对数据平面中某个特定的P4交换机进行独立配置。
 
