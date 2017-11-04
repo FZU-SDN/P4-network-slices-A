@@ -1,3 +1,1 @@
-```
-p4c -b bmv2-v1model-p4org switch.p4 -o switch.bmv2.json
-```
+For supporting the state-of-the-art P4 language, that is P4-16, we rewrited this demo using P4-16 and leveraged some new features such as tunneling instead of these old demos. See [vt](https://github.com/Wasdns/p4-examples-16/tree/master/vt) for details.
