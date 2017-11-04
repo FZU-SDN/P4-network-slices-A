@@ -1,41 +1,25 @@
 # P4-network-slices-A
 
-Fuzhou University SDN Lab | P4language
+Using P4 to slice the substrate network.
 
-福州大学数计学院 SDN实验室 P4语言组
+## Dependencies
 
-## Environment Requirements 环境要求：
+- bmv2;
+- p4c-bm;
+- p4c(option).
 
-1.Ubuntu 14.04 64bit
+## Roadmap
 
-2.P4 related repo: 
+This repo maintains our previous efforts on using P4 langauge, including five demos:
 
-a.bmv2 
+- Demo1: Add a register and a flow table to original source_routing.p4;
+- Demo2: Add a counter to a simple P4 program and leverage runtime command to get the counter information;
+- Demo3: With the experience acquired from demo2, we take a further step that apply the mechanism of droping packets as soon as the total packet number exceed the threshold;
+- Demo4: Apply slicing mechanism in terms of droping packets on a simple topologic;
+- Demo5: The final example that illustrates the whole mechanism of slicing the substrate network with P4 language.
 
-b.p4c-bm
+## Questions
 
-c.p4factory 
+Mail: wasdnsxchen@gmail.com
 
-## Hint 注意：
-
-**1.Please copy the demo in this repo into the dir `bmv2/target` before using it.**
-
-**请将demo复制至目录`bmv2/target/`下运行！**
-
-```
-cp -r [demo_name] [your_dir]/bmv2/target
-```
-
-**2.Please using the command showed below once you exit the mininet:**
-
-**在每一次退出mininet之后，请执行：**
-
-```
-sudo mn -c
-```
-
-**3.Don't add redundant blank spaces to the content of commands.txt. It'll cause the exception "duplicate entry".**
-
-**在编写commands.txt的过程中，请不要加入多余的空行，这会导致`DUPLICATE_ENTRY`错误。**
-
-> 2017.2 Wasdns
+2017.2 Wasdns. Rewrite on 2017.11.
