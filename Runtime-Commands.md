@@ -66,8 +66,6 @@ EOF  greet
 
 The basic operations of flow table:
 
-流表的基本操作：
-
 ```
 set the default action of the flow table:
 
@@ -84,8 +82,6 @@ delete an entry:
 
 The basic operations of counter:
 
-计数器的基本操作：
-
 ```
 read the information from the counter instance:
 
@@ -96,9 +92,7 @@ reset the value of counter instance:
 counter_reset $index_of_cell
 ```
 
-Multicast-Related:
-
-多播组：
+Multicast:
 
 ```
 Create a multicast group:
